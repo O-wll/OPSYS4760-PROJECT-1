@@ -12,18 +12,8 @@ int main(int argc, char **argv) { // Main program
 	int calls = 0;
 	int iterations = 0;
 
-	// Input validation
-	if (argc < 2) {
-		printf("Error: Please input an integer \n");
-		return(EXIT_FAILURE);
-	}
-
-	// Exit if input integer is less than zero.
+	// Calls is how many times the program should run.
 	calls = atoi(argv[1]);
-	if (calls <= 0) {
-		printf("Error: Please input a positive integer. \n");
-		return(EXIT_FAILURE);
-	}
 	
 	// For loop prints the user pid and the parent pid before sleeping, then the same info after sleeping.
 	for (int i = 0; i < calls; i++) {
