@@ -63,10 +63,13 @@ int main(int argc, char** argv) { // Main program
 	
 	// Main forking process
 	pid_t pid;
+	char strIter[20]; // We need to convert our iteration value to a string to use execl().
+	sprintf(strIter, "%d", iterations);
+
 	while (currentProc < childProcesses) { // Continue until total child processes is reached.
 		pid = fork();
 		if (pid == 0) { // Fork successful.
-			printf("Child pid: %d Parent pid: %d\n", getpid(), getppid());
+			execl("./user", "user", strIter, (char *)NULL);  // Run ./user
 			exit(EXIT_SUCCESS);
 		} else {
 			currentProc++;
