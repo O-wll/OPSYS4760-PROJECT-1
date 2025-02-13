@@ -16,7 +16,7 @@ int main(int argc, char** argv) { // Main program
 	int iterations = 1;
 	int simulations = 0;
 	int currentProc = 0;
-	int currentIter = 0;
+	int procRunning = 0;
 
 	if (argc < 2) {  // If user enters no arguments
 		printf("Error: Argument expected \n");
@@ -37,8 +37,8 @@ int main(int argc, char** argv) { // Main program
 			case 's': // How many simulations to run at once.
 				simulations = atoi(optarg);
 				// Ensuring simulations isn't zero or below for the program to work.
-				if (simulations <= 0) {
-					printf("Error: Simulations must be at least one. \n");
+				if (simulations < 0) {
+					printf("Error: Simulations must be positive. \n");
 					return(EXIT_FAILURE);
 				}	
 				break;
@@ -60,6 +60,11 @@ int main(int argc, char** argv) { // Main program
 		printf("Error: Iterations must be above 0 \n");
 		return(EXIT_FAILURE);
 	}
+
+	// If user does not put anything for how many concurrent simulations, default to do them all at once.
+	if (simulations == 0) {
+		simulations = childProcesses;
+	}
 	
 	// Main forking process
 	pid_t pid;
@@ -67,18 +72,25 @@ int main(int argc, char** argv) { // Main program
 	sprintf(strIter, "%d", iterations);
 
 	while (currentProc < childProcesses) { // Continue until total child processes is reached.
-		pid = fork();
-		if (pid == 0) { // Fork successful.
-			execl("./user", "user", strIter, (char *)NULL);  // Run ./user
-			exit(EXIT_SUCCESS);
-		} else {
-			currentProc++;
+		if (procRunning < simulations) {
+			pid = fork();
+			if (pid == 0) { // Fork successful.
+				execl("./user", "user", strIter, (char *)NULL);  // Run ./user
+				exit(EXIT_SUCCESS);
+			} else {
+				currentProc++;
+				procRunning++;
+			}
+		} else { // If the current number of processes are running equal to the amount of simulations the user requested, than wait until a process finishes and then decrease the count to let another process run.
+			wait(NULL); 
+			procRunning--;
 		}
 	}
 	
-	// Waiting for the child processes to complete, to ensure clean output.
-	for (int i = 0; i < childProcesses; i++) {
+	// Prevent program from exiting too early after all child processes have loaded in also ensures the count of processes running still decreases, after child process is finished, after the while loop above ends.
+	while (procRunning > 0) {
 		wait(NULL);
+		procRunning--;
 	}
 
 	return 0;
