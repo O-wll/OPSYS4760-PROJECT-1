@@ -4,6 +4,8 @@ Course: Comp Sci 4760
 
 Date: 2/12/2025
 
+GitHub Link: github.com/O-wll/OPSYS4760-PROJECT-1
+
 Description of Project:
 
 This project allows the user to play around with fork() with two files, user.c and oss.c. user.c is a file that prints out iterations, determined by user input, of the child pid and parent pid. oss.c will be the file actually forking and handling the output of user.c. The user will be able to:
