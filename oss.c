@@ -7,22 +7,22 @@
 // Date: 2/12/2025
 
 int help() {  // Help function prints out instructions to run this program and also explains what the program does.
-	printf("Test \n");
+	printf("This program forks and splits off into the amount of child processes of your choice (has to be above zero), how many iterations user.c will run, and how many simulations can happen at once.\n");
+	printf("Command structure: ./oss [-h] [-n proc] [-s simul] [-t iter]\n");
+	printf("-h prints out the help function you are currently seeing. \n");
+	printf("-n is for indicating how many child processes you want to run, proc is the number you'll input. Default is one \n");
+	printf("-t is for indicating how many iterations user will run, iter is the number you'll input. Default is one \n");
+	printf("-s is for indicating how many simulations, child processes, will run at once, simul is the number you'll input. Default is equal to how many child processes you're running. \n");
 }
 
 int main(int argc, char** argv) { // Main program
 	int userInput = 0;
-	int childProcesses = 0;
-	int iterations = 1;
+	int childProcesses = 1; // Default value to one process if user does not input.
+	int iterations = 1; // Default value to one iteration if user does not input.
 	int simulations = 0;
 	int currentProc = 0;
 	int procRunning = 0;
 
-	if (argc < 2) {  // If user enters no arguments
-		printf("Error: Argument expected \n");
-		printf("Usage: ./oss -h to learn how to use this program \n");
-		return(EXIT_FAILURE);
-	}
 
 	// Input handling 
 	while ((userInput = getopt(argc, argv, "n:s:t:h")) != -1) {
