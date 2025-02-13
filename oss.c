@@ -6,7 +6,7 @@
 // Author: Dat Nguyen
 // Date: 2/12/2025
 
-int help() {  // Help function prints out instructions to run this program and also explains what the program does.
+void help() {  // Help function prints out instructions to run this program and also explains what the program does.
 	printf("This program forks and splits off into the amount of child processes of your choice (has to be above zero), how many iterations user.c will run, and how many simulations can happen at once.\n");
 	printf("Command structure: ./oss [-h] [-n proc] [-s simul] [-t iter]\n");
 	printf("-h prints out the help function you are currently seeing. \n");
