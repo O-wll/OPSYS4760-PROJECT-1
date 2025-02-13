@@ -5,6 +5,7 @@
 
 // Author: Dat Nguyen
 // Date: 2/12/2025
+// oss.c is the main program that users will be interacting with, the program is explained in the help() function. 
 
 void help() {  // Help function prints out instructions to run this program and also explains what the program does.
 	printf("This program forks and splits off into the amount of child processes of your choice (has to be above zero), how many iterations user.c will run, and how many simulations can happen at once.\n");
