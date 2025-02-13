@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 // Author: Dat Nguyen
 // Date: 2/12/2025
@@ -14,6 +15,8 @@ int main(int argc, char** argv) { // Main program
 	int childProcesses = 0;
 	int iterations = 1;
 	int simulations = 0;
+	int currentProc = 0;
+	int currentIter = 0;
 
 	if (argc < 2) {  // If user enters no arguments
 		printf("Error: Argument expected \n");
@@ -26,6 +29,10 @@ int main(int argc, char** argv) { // Main program
 		switch(userInput) {
 			case 'n': // How many child processes to launch.
 				childProcesses = atoi(optarg);
+				if (childProcesses <= 0) {
+					printf("Error: Total child processes must be at least one. \n");
+					return(EXIT_FAILURE);
+				}
 				break;
 			case 's': // How many simulations to run at once.
 				simulations = atoi(optarg);
@@ -54,10 +61,22 @@ int main(int argc, char** argv) { // Main program
 		return(EXIT_FAILURE);
 	}
 	
-	// Testing purposes, making sure that the optarg is putting the values correctly.
-	printf("Child process: %d \n", childProcesses);
-	printf("Simulations: %d \n", simulations);
-	printf("Iterations: %d \n", iterations);
+	// Main forking process
+	pid_t pid;
+	while (currentProc < childProcesses) { // Continue until total child processes is reached.
+		pid = fork();
+		if (pid == 0) { // Fork successful.
+			printf("Child pid: %d Parent pid: %d\n", getpid(), getppid());
+			exit(EXIT_SUCCESS);
+		} else {
+			currentProc++;
+		}
+	}
+	
+	// Waiting for the child processes to complete, to ensure clean output.
+	for (int i = 0; i < childProcesses; i++) {
+		wait(NULL);
+	}
 
 	return 0;
 }
